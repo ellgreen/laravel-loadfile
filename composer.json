@@ -1,0 +1,50 @@
+{
+    "name": "ellgreen/laravel-loadfile",
+    "description": "",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Ellis Green",
+            "email": "devellisper@outlook.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "EllGreen\\LaravelLoadFile\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\Unit\\": "tests/Unit",
+            "Tests\\Feature\\": "tests/Feature"
+        }
+    },
+    "require": {
+        "php": "^7.4",
+        "illuminate/database": "^8.28"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^9",
+        "orchestra/testbench": "^6.17"
+    },
+    "scripts": {
+        "test-unit": "php ./vendor/bin/phpunit tests/Unit",
+        "test": [
+            "@docker-up",
+            "@docker-test"
+        ],
+        "docker-up": "docker compose up -d database",
+        "docker-test": "docker compose run --rm app php ./vendor/bin/phpunit"
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "EllGreen\\LaravelLoadFile\\Laravel\\Providers\\LaravelLoadFileServiceProvider"
+            ],
+            "aliases": {
+                "LoadFile": "EllGreen\\LaravelLoadFile\\Laravel\\Facades\\LoadFile"
+            }
+        }
+    }
+}
