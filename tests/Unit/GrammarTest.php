@@ -37,9 +37,29 @@ class GrammarTest extends TestCase
         SQL);
     }
 
+    public function testReplace()
+    {
+        $this->builder->replace();
+
+        $this->assertSqlAndBindings(<<<'SQL'
+            load data local infile '/path/to/employees.csv' replace
+            into table `employees` (`forename`, `surname`, `employee_id`)
+        SQL);
+    }
+
+    public function testIgnore()
+    {
+        $this->builder->ignore();
+
+        $this->assertSqlAndBindings(<<<'SQL'
+            load data local infile '/path/to/employees.csv' ignore
+            into table `employees` (`forename`, `surname`, `employee_id`)
+        SQL);
+    }
+
     public function testIgnoreLines()
     {
-        $this->builder->ignore(1);
+        $this->builder->ignoreLines(1);
 
         $this->assertSqlAndBindings(<<<'SQL'
             load data local infile '/path/to/employees.csv'

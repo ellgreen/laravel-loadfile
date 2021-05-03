@@ -53,6 +53,20 @@ class BuilderTest extends TestCase
         $this->assertTrue($this->builder->local);
     }
 
+    public function testSetReplace()
+    {
+        $this->builder->replace();
+
+        $this->assertTrue($this->builder->replace);
+    }
+
+    public function testSetIgnore()
+    {
+        $this->builder->ignore();
+
+        $this->assertTrue($this->builder->ignore);
+    }
+
     public function testSetCharset()
     {
         $this->builder->charset($charset = 'utf8mb4');
@@ -114,9 +128,9 @@ class BuilderTest extends TestCase
         $this->assertSame('\\n', $this->builder->linesTerminatedBy);
     }
 
-    public function testSetIgnore()
+    public function testSetIgnoreLines()
     {
-        $this->builder->ignore(1);
+        $this->builder->ignoreLines(1);
         
         $this->assertSame(1, $this->builder->ignoreLines);
     }

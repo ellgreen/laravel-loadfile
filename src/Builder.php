@@ -14,6 +14,10 @@ class Builder
     public ?string $file = null;
     public ?string $table = null;
     public bool $local = false;
+
+    public bool $replace = false;
+    public bool $ignore = false;
+
     public ?string $charset = null;
 
     public ?string $fieldsTerminatedBy = null;
@@ -72,6 +76,28 @@ class Builder
     public function local(bool $local): self
     {
         $this->local = $local;
+        return $this;
+    }
+
+    public function replace(bool $replace = true): self
+    {
+        $this->replace = $replace;
+
+        if ($replace) {
+            $this->ignore = false;
+        }
+
+        return $this;
+    }
+
+    public function ignore(bool $ignore = true): self
+    {
+        $this->ignore = $ignore;
+
+        if ($ignore) {
+            $this->replace = false;
+        }
+
         return $this;
     }
 
@@ -143,9 +169,9 @@ class Builder
         return $this;
     }
 
-    public function ignore(int $lines): self
+    public function ignoreLines(int $count): self
     {
-        $this->ignoreLines = $lines;
+        $this->ignoreLines = $count;
         return $this;
     }
 
