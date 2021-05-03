@@ -14,6 +14,7 @@ class Builder
     public ?string $file = null;
     public ?string $table = null;
     public bool $local = false;
+    public ?string $charset = null;
 
     public ?string $fieldsTerminatedBy = null;
     public ?string $fieldsEnclosedBy = null;
@@ -71,6 +72,12 @@ class Builder
     public function local(bool $local): self
     {
         $this->local = $local;
+        return $this;
+    }
+
+    public function charset(?string $charset): self
+    {
+        $this->charset = $charset;
         return $this;
     }
 

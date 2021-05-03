@@ -12,6 +12,7 @@ class LoadFileTest extends TestCase
         LoadFile::connection('mysql')
             ->file(realpath(__DIR__ . '/../data/people-simple.csv'), true)
             ->into('people')
+            ->charset('utf8mb4')
             ->columns(['name', 'dob', 'greeting'])
             ->fields(',', '"', '\\\\', true)
             ->lines('', '\\n')
