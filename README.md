@@ -113,5 +113,5 @@ composer test-unit
 **You will need to have [docker](https://www.docker.com/) installed for these.**
 
 ```bash
-composer test
+composer check
 ```
