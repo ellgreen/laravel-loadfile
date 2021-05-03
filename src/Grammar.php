@@ -16,6 +16,10 @@ class Grammar extends MySqlGrammar
             'into table ' . $this->wrapTable($query->table),
         );
 
+        if (isset($query->charset)) {
+            $querySegments->push('character set ' . $this->quoteString($query->charset));
+        }
+
         $querySegments->push($this->compileFields(
             $query->fieldsTerminatedBy,
             $query->fieldsEnclosedBy,

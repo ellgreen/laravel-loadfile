@@ -53,6 +53,13 @@ class BuilderTest extends TestCase
         $this->assertTrue($this->builder->local);
     }
 
+    public function testSetCharset()
+    {
+        $this->builder->charset($charset = 'utf8mb4');
+
+        $this->assertSame($charset, $this->builder->charset);
+    }
+
     public function testSetFieldsTerminatedBy()
     {
         $this->builder->fieldsTerminatedBy(',');
