@@ -12,9 +12,19 @@ class Grammar extends MySqlGrammar
         $querySegments = collect();
 
         $querySegments->push(
-            'load data ' . ($query->local ? 'local' : '') . ' infile ' . $this->quoteString($query->file),
-            'into table ' . $this->wrapTable($query->table),
+            'load data' . ($query->local ? ' local' : ''),
+            'infile ' . $this->quoteString($query->file),
         );
+
+        if ($query->replace) {
+            $querySegments->push('replace');
+        }
+
+        if ($query->ignore) {
+            $querySegments->push('ignore');
+        }
+
+        $querySegments->push('into table ' . $this->wrapTable($query->table));
 
         if (isset($query->charset)) {
             $querySegments->push('character set ' . $this->quoteString($query->charset));

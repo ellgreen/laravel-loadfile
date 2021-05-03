@@ -61,7 +61,7 @@ class LoadFileTest extends TestCase
     {
         LoadFile::file(realpath(__DIR__ . '/../data/people.csv'), true)
             ->into('people')
-            ->ignore(1)
+            ->ignoreLines(1)
             ->columns([DB::raw('@forename'), DB::raw('@surname'), 'dob'])
             ->set([
                 'greeting' => 'Hello',
@@ -75,6 +75,50 @@ class LoadFileTest extends TestCase
             'name' => 'John Doe',
             'dob' => '1980-01-01',
             'greeting' => 'Hello',
+        ]);
+
+        $this->assertDatabaseHas('people', [
+            'name' => 'Jane Doe',
+            'dob' => '1975-06-30',
+            'greeting' => 'Hello',
+        ]);
+    }
+
+    public function testReplace()
+    {
+        LoadFile::file(realpath(__DIR__ . '/../data/people-simple.csv'), true)
+            ->replace()
+            ->into('people')
+            ->columns(['name', 'dob', 'greeting'])
+            ->fields(',', '"', '\\\\', true)
+            ->load();
+
+        $this->assertDatabaseHas('people', [
+            'name' => 'John Doe',
+            'dob' => '1980-01-01',
+            'greeting' => 'Bonjour',
+        ]);
+
+        $this->assertDatabaseHas('people', [
+            'name' => 'Jane Doe',
+            'dob' => '1975-06-30',
+            'greeting' => 'Hello',
+        ]);
+    }
+
+    public function testIgnore()
+    {
+        LoadFile::file(realpath(__DIR__ . '/../data/people-simple.csv'), true)
+            ->ignore()
+            ->into('people')
+            ->columns(['name', 'dob', 'greeting'])
+            ->fields(',', '"', '\\\\', true)
+            ->load();
+
+        $this->assertDatabaseHas('people', [
+            'name' => 'John Doe',
+            'dob' => '1980-01-01',
+            'greeting' => 'Bonjour',
         ]);
 
         $this->assertDatabaseHas('people', [

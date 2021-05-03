@@ -41,7 +41,7 @@ LoadFile::file('/path/to/employees.csv', $local = true)
 LoadFile::file('/path/to/employees.csv', $local = true)
     ->into('employees')
     ->columns(['forename', 'surname', 'employee_id'])
-    ->ignore(1)
+    ->ignoreLines(1)
     ->load();
 ```
 
