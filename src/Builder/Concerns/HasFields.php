@@ -9,13 +9,13 @@ trait HasFields
     private bool $fieldsOptionallyEnclosed = false;
     private ?string $fieldsEscapedBy = null;
 
-    public function fieldsTerminatedBy(string $terminatedBy): self
+    public function fieldsTerminatedBy(?string $terminatedBy): self
     {
         $this->fieldsTerminatedBy = $terminatedBy;
         return $this;
     }
 
-    public function fieldsEnclosedBy(string $enclosedBy, ?bool $optionally = null): self
+    public function fieldsEnclosedBy(?string $enclosedBy, ?bool $optionally = null): self
     {
         $this->fieldsEnclosedBy = $enclosedBy;
 
@@ -32,16 +32,16 @@ trait HasFields
         return $this;
     }
 
-    public function fieldsEscapedBy($escapedBy): self
+    public function fieldsEscapedBy(?string $escapedBy): self
     {
         $this->fieldsEscapedBy = $escapedBy;
         return $this;
     }
 
     public function fields(
-        string $terminatedBy,
-        string $enclosedBy,
-        string $escapedBy,
+        ?string $terminatedBy,
+        ?string $enclosedBy,
+        ?string $escapedBy,
         ?bool $optionallyEnclosed = null
     ): self {
         $this->fieldsTerminatedBy($terminatedBy);
