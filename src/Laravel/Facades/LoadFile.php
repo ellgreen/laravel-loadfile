@@ -2,7 +2,7 @@
 
 namespace EllGreen\LaravelLoadFile\Laravel\Facades;
 
-use EllGreen\LaravelLoadFile\Builder;
+use EllGreen\LaravelLoadFile\Builder\Builder;
 use Illuminate\Support\Facades\Facade;
 
 /**
