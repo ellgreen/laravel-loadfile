@@ -3,18 +3,29 @@
 namespace EllGreen\LaravelLoadFile;
 
 use EllGreen\LaravelLoadFile\Builder\Builder;
+use EllGreen\LaravelLoadFile\Exceptions\CompilationException;
 use Illuminate\Database\Query\Grammars\MySqlGrammar;
 
 class Grammar extends MySqlGrammar
 {
-    public function compileLoadFile(Builder $query): array
+    /**
+     * @throws CompilationException
+     */
+    public function compileLoadFile(Builder $query): CompiledQuery
     {
         $bindings = collect();
         $querySegments = collect();
 
+        $file = $query->getFile();
+        $table = $query->getTable();
+
+        if (! isset($file, $table)) {
+            throw CompilationException::noFileOrTableSupplied();
+        }
+
         $querySegments->push(
             'load data' . ($query->isLocal() ? ' local' : ''),
-            'infile ' . $this->quoteString($query->getFile()),
+            'infile ' . $this->quoteString($file),
         );
 
         if ($query->isReplace()) {
@@ -25,10 +36,10 @@ class Grammar extends MySqlGrammar
             $querySegments->push('ignore');
         }
 
-        $querySegments->push('into table ' . $this->wrapTable($query->getTable()));
+        $querySegments->push('into table ' . $this->wrapTable($table));
 
-        if ($query->getCharset()) {
-            $querySegments->push('character set ' . $this->quoteString($query->getCharset()));
+        if ($charset = $query->getCharset()) {
+            $querySegments->push('character set ' . $this->quoteString($charset));
         }
 
         $querySegments->push($this->compileFields(
@@ -47,15 +58,17 @@ class Grammar extends MySqlGrammar
         $columns = $query->getColumns();
 
         if (! empty($columns)) {
-            $querySegments->push('(' . $this->columnize($query->getColumns()) . ')');
+            $querySegments->push('(' . $this->columnize($columns) . ')');
         }
 
         if ($set = $query->getSet()) {
             $querySegments->push($this->compileSetColumns($set));
-            $bindings->push(...collect($set)->filter(fn($value) => ! $this->isExpression($value))->values());
+            /** @psalm-suppress MissingClosureParamType|InvalidArgument */
+            $values = collect($set)->filter(fn($value) => ! $this->isExpression($value))->values();
+            $bindings->push(...$values->toArray());
         }
 
-        return [$querySegments->filter()->implode(' '), $bindings->toArray()];
+        return new CompiledQuery($querySegments->filter()->implode(' '), $bindings->toArray());
     }
 
     private function compileFields(
@@ -92,7 +105,9 @@ class Grammar extends MySqlGrammar
 
     private function compileSetColumns(array $values): string
     {
+        /** @psalm-suppress MissingClosureParamType */
         return 'set ' . collect($values)->map(function ($value, $key) {
+            /** @psalm-suppress MixedArgument */
             return $this->wrap($key) . ' = ' . $this->parameter($value);
         })->implode(', ');
     }

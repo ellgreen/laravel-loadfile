@@ -3,6 +3,7 @@
 namespace Tests\Unit\Builder;
 
 use EllGreen\LaravelLoadFile\Builder\Builder;
+use EllGreen\LaravelLoadFile\CompiledQuery;
 use EllGreen\LaravelLoadFile\Grammar;
 use Illuminate\Database\Connection;
 use Illuminate\Database\DatabaseManager;
@@ -34,7 +35,7 @@ class BuilderTest extends TestCase
     public function testLoad()
     {
         $this->grammar->method('compileLoadFile')
-            ->willReturn(['sql', ['bindings']]);
+            ->willReturn(new CompiledQuery('sql', ['bindings']));
 
         $connection = $this->createMock(Connection::class);
         $connection->method('statement')

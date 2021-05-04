@@ -2,6 +2,8 @@
 
 namespace EllGreen\LaravelLoadFile\Builder;
 
+use EllGreen\LaravelLoadFile\CompiledQuery;
+use EllGreen\LaravelLoadFile\Exceptions\CompilationException;
 use EllGreen\LaravelLoadFile\Grammar;
 use EllGreen\LaravelLoadFile\Builder\Concerns;
 use Illuminate\Database\DatabaseManager;
@@ -27,17 +29,23 @@ class Builder
         $this->grammar = $grammar;
     }
 
-    public function compile(): array
+    /**
+     * @throws CompilationException
+     */
+    public function compile(): CompiledQuery
     {
         return $this->grammar->compileLoadFile($this);
     }
 
+    /**
+     * @throws CompilationException
+     */
     public function load(): bool
     {
-        list($sql, $bindings) = $this->compile();
+        $query = $this->compile();
 
         $connection = $this->databaseManager->connection($this->connection);
-        return $connection->statement($sql, $bindings);
+        return $connection->statement($query->getSql(), $query->getBindings());
     }
 
     public function connection(?string $name = null): self

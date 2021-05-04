@@ -10,6 +10,9 @@ use Illuminate\Support\ServiceProvider;
 
 class LaravelLoadFileServiceProvider extends ServiceProvider
 {
+    /**
+     * @psalm-suppress MixedArgument
+     */
     public function register(): void
     {
         $this->app->bind(Builder::class, function (Application $app) {

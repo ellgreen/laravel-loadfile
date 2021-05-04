@@ -166,15 +166,15 @@ class GrammarTest extends TestCase
             str_replace('    ', '', str_replace("\n", ' ', $expectedSql))
         );
 
-        list($sql, $bindings) = $this->grammar->compileLoadFile($this->builder);
+        $query = $this->grammar->compileLoadFile($this->builder);
 
-        $this->assertSame($expectedSql, $sql);
+        $this->assertSame($expectedSql, $query->getSql());
 
         if (isset($expectedBindings)) {
-            $this->assertSame($expectedBindings, $bindings);
+            $this->assertSame($expectedBindings, $query->getBindings());
             return;
         }
 
-        $this->assertEmpty($bindings);
+        $this->assertEmpty($query->getBindings());
     }
 }

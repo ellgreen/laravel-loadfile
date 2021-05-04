@@ -9,6 +9,8 @@ https://dev.mysql.com/doc/refman/8.0/en/insert-optimization.html
 
 ## Installation
 
+**Requires Laravel version > 8**
+
 ```bash
 composer require ellgreen/laravel-loadfile
 ```
