@@ -31,6 +31,7 @@
     },
     "scripts": {
         "test-unit": "php ./vendor/bin/phpunit tests/Unit",
+        "test-unit-coverage": "php ./vendor/bin/phpunit tests/Unit --coverage-html .coverage/unit",
         "check": [
             "@docker-up",
             "@docker-test",
@@ -38,6 +39,7 @@
         ],
         "docker-up": "docker compose up -d database",
         "docker-test": "docker compose run --rm app php ./vendor/bin/phpunit",
+        "docker-test-coverage": "docker compose run --rm app php ./vendor/bin/phpunit --coverage-html .coverage/all",
         "docker-cs": "docker compose run --rm app php ./vendor/bin/phpcs --standard=PSR12 src/"
     },
     "extra": {

@@ -2,12 +2,11 @@
 
 namespace Tests\Unit;
 
-use EllGreen\LaravelLoadFile\Builder;
+use EllGreen\LaravelLoadFile\Builder\Builder;
 use EllGreen\LaravelLoadFile\Grammar;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Database\Query\Expression;
 use PHPUnit\Framework\TestCase;
-use function PHPUnit\Framework\assertEmpty;
 
 class GrammarTest extends TestCase
 {
@@ -34,6 +33,15 @@ class GrammarTest extends TestCase
         $this->assertSqlAndBindings(<<<'SQL'
             load data local infile '/path/to/employees.csv'
             into table `employees` (`forename`, `surname`, `employee_id`)
+        SQL);
+    }
+
+    public function testCompileWithNoColumns()
+    {
+        $this->builder->columns(null);
+
+        $this->assertSqlAndBindings(<<<'SQL'
+            load data local infile '/path/to/employees.csv' into table `employees`
         SQL);
     }
 
@@ -113,6 +121,41 @@ class GrammarTest extends TestCase
         $this->assertSqlAndBindings(<<<'SQL'
             load data local infile '/path/to/employees.csv'
             into table `employees` (`forename`, `surname`, `employee_id`)
+            set `name` = concat(@forename, ' ', @surname), `department` = ?
+        SQL, ['sales']);
+    }
+
+    public function testCompileWithCharset()
+    {
+        $this->builder->charset('utf8mb4');
+
+        $this->assertSqlAndBindings(<<<'SQL'
+            load data local infile '/path/to/employees.csv'
+            into table `employees` character set 'utf8mb4'
+            (`forename`, `surname`, `employee_id`)
+        SQL);
+    }
+
+    public function testCompileWithAllOptions()
+    {
+        $this->builder
+            ->replace()
+            ->charset('utf8mb4')
+            ->fields(',', '"', '\\\\', true)
+            ->lines('', '\\n')
+            ->ignoreLines(1)
+            ->set([
+                'name' => new Expression("concat(@forename, ' ', @surname)"),
+                'department' => 'sales',
+            ]);
+
+        $this->assertSqlAndBindings(<<<'SQL'
+            load data local infile '/path/to/employees.csv'
+            replace into table `employees` character set 'utf8mb4'
+            fields terminated by ',' optionally enclosed by '"' escaped by '\\'
+            lines starting by '' terminated by '\n'
+            ignore 1 lines
+            (`forename`, `surname`, `employee_id`)
             set `name` = concat(@forename, ' ', @surname), `department` = ?
         SQL, ['sales']);
     }
