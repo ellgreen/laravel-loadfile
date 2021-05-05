@@ -5,6 +5,7 @@ services:
     build: ./tests/docker
     volumes:
       - .:/app
+      - $HOME/.composer/cache:/root/.composer/cache
     working_dir: /app
 
   database:

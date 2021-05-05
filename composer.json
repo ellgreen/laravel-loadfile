@@ -22,11 +22,11 @@
     },
     "require": {
         "php": "^7.4",
-        "illuminate/database": "^8.28"
+        "illuminate/database": "^6.0|^7.0|^8.0"
     },
     "require-dev": {
         "phpunit/phpunit": "^9",
-        "orchestra/testbench": "^6.17",
+        "orchestra/testbench": "^4.0|^5.0|^6.0",
         "squizlabs/php_codesniffer": "^3.6",
         "vimeo/psalm": "^4.7"
     },
@@ -35,15 +35,16 @@
         "test-unit-coverage": "php ./vendor/bin/phpunit tests/Unit --coverage-html .coverage/unit",
         "check": [
             "@docker-up",
-            "@docker-test",
+            "@docker-laravel-test",
             "@docker-cs",
             "@docker-static-analysis"
         ],
         "docker-up": "docker compose up -d database",
         "docker-test": "docker compose run --rm app php ./vendor/bin/phpunit",
+        "docker-laravel-test": "docker compose run --rm app php tests/laravel/laravel-version-test.php",
         "docker-test-coverage": "docker compose run --rm app php ./vendor/bin/phpunit --coverage-html .coverage/all",
-        "docker-static-analysis": "docker compose run --rm app php ./vendor/bin/psalm",
-        "docker-cs": "docker compose run --rm app php ./vendor/bin/phpcs --standard=PSR12 src/"
+        "docker-cs": "docker compose run --rm app php ./vendor/bin/phpcs --standard=PSR12 src/",
+        "docker-static-analysis": "docker compose run --rm app php ./vendor/bin/psalm"
     },
     "extra": {
         "laravel": {

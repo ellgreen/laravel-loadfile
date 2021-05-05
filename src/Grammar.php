@@ -23,10 +23,10 @@ class Grammar extends MySqlGrammar
             throw CompilationException::noFileOrTableSupplied();
         }
 
-        $querySegments->push(
+        $querySegments->push([
             'load data' . ($query->isLocal() ? ' local' : ''),
             'infile ' . $this->quoteString($file),
-        );
+        ]);
 
         if ($query->isReplace()) {
             $querySegments->push('replace');
@@ -65,10 +65,13 @@ class Grammar extends MySqlGrammar
             $querySegments->push($this->compileSetColumns($set));
             /** @psalm-suppress MissingClosureParamType|InvalidArgument */
             $values = collect($set)->filter(fn($value) => ! $this->isExpression($value))->values();
-            $bindings->push(...$values->toArray());
+            $bindings->push($values->toArray());
         }
 
-        return new CompiledQuery($querySegments->filter()->implode(' '), $bindings->toArray());
+        return new CompiledQuery(
+            $querySegments->flatten()->filter()->implode(' '),
+            $bindings->flatten()->toArray()
+        );
     }
 
     private function compileFields(
