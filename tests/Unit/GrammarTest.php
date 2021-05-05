@@ -3,6 +3,7 @@
 namespace Tests\Unit;
 
 use EllGreen\LaravelLoadFile\Builder\Builder;
+use EllGreen\LaravelLoadFile\Exceptions\CompilationException;
 use EllGreen\LaravelLoadFile\Grammar;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Database\Query\Expression;
@@ -26,6 +27,42 @@ class GrammarTest extends TestCase
         $this->builder->file('/path/to/employees.csv', $local = true)
             ->into('employees')
             ->columns(['forename', 'surname', 'employee_id']);
+    }
+
+    public function testNoFileThrowsException()
+    {
+        $this->expectException(CompilationException::class);
+
+        $builder = (new Builder(
+            $this->createMock(DatabaseManager::class),
+            $this->createMock(Grammar::class),
+        ))->into('table');
+
+        $this->grammar->compileLoadFile($builder);
+    }
+
+    public function testNoTableThrowsException()
+    {
+        $this->expectException(CompilationException::class);
+
+        $builder = (new Builder(
+            $this->createMock(DatabaseManager::class),
+            $this->createMock(Grammar::class),
+        ))->file('path/to/file');
+
+        $this->grammar->compileLoadFile($builder);
+    }
+
+    public function testNoTableOrFileThrowsException()
+    {
+        $this->expectException(CompilationException::class);
+
+        $builder = new Builder(
+            $this->createMock(DatabaseManager::class),
+            $this->createMock(Grammar::class),
+        );
+
+        $this->grammar->compileLoadFile($builder);
     }
 
     public function testSimpleCompile()
