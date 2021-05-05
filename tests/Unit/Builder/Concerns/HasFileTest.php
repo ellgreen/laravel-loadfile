@@ -2,20 +2,20 @@
 
 namespace Tests\Unit\Builder\Concerns;
 
-use EllGreen\LaravelLoadFile\Builder\Concerns\LoadsFiles;
+use EllGreen\LaravelLoadFile\Builder\Concerns\HasFile;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
-class LoadsFilesTest extends TestCase
+class HasFileTest extends TestCase
 {
-    /** @var MockObject|LoadsFiles */
+    /** @var MockObject|HasFile */
     private MockObject $loadsFiles;
 
     protected function setUp(): void
     {
         parent::setUp();
 
-        $this->loadsFiles = $this->getMockForTrait(LoadsFiles::class);
+        $this->loadsFiles = $this->getMockForTrait(HasFile::class);
     }
 
     public function testSetFile()

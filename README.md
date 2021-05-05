@@ -102,6 +102,43 @@ LoadFile::connection('mysql')
     ->load();
 ```
 
+## Loading data into Eloquent Models
+
+Simply add the `LoadsFiles` trait to your model like so:
+
+```php
+use EllGreen\LaravelLoadFile\Laravel\Traits\LoadsFiles;
+
+class User extends Model
+{
+    use LoadsFiles;
+}
+```
+
+Then you can use the following method to load a file into that table:
+
+```php
+User::loadFile('/path/to/users.csv', $local = true);
+```
+
+### Need to specify options to load the file with?
+
+Add the following method to your Model
+
+```php
+class User extends Model
+{
+    use LoadsFiles;
+
+    public function loadFileOptions(Builder $builder): void
+    {
+        $builder
+            ->fieldsTerminatedBy(',')
+            ->ignoreLines(1);
+    }
+}
+```
+
 ## Development
 
 ### Unit tests

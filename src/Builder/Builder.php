@@ -10,7 +10,7 @@ use Illuminate\Database\DatabaseManager;
 
 class Builder
 {
-    use Concerns\LoadsFiles;
+    use Concerns\HasFile;
     use Concerns\ReplacesOrIgnores;
     use Concerns\HasColumns;
     use Concerns\HasFields;

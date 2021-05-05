@@ -2,7 +2,7 @@
 
 namespace EllGreen\LaravelLoadFile\Builder\Concerns;
 
-trait LoadsFiles
+trait HasFile
 {
     private ?string $file = null;
     private bool $local = false;
