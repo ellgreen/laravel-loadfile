@@ -9,15 +9,12 @@ $laravelVersions = array_map(function ($version) {
     return trim($version, '^<>.0');
 }, explode('|', $composerConfig['require']['illuminate/database']));
 
+passthru('rsync --delete -a --exclude=vendor/ --exclude=.*/ /app ' . dirname(TEST_PATH));
+
+chdir(TEST_PATH);
+
 foreach ($laravelVersions as $laravelVersion) {
     echo "Testing for Laravel {$laravelVersion}\n";
-
-    passthru(
-        'rsync --delete -a --exclude=vendor/ --exclude=.*/ /app ' .
-        dirname(TEST_PATH)
-    );
-
-    chdir(TEST_PATH);
 
     $composerConfig['require']['illuminate/database'] = "^{$laravelVersion}.0";
     $testBench = intval($laravelVersion) - 2;
