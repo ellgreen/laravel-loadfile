@@ -44,7 +44,7 @@ class Builder
     {
         $query = $this->compile();
 
-        $connection = $this->databaseManager->connection($this->connection);
+        $connection = $this->databaseManager->connection($this->getConnectionName());
         return $connection->statement($query->getSql(), $query->getBindings());
     }
 
@@ -52,5 +52,10 @@ class Builder
     {
         $this->connection = $name;
         return $this;
+    }
+
+    public function getConnectionName(): ?string
+    {
+        return $this->connection;
     }
 }

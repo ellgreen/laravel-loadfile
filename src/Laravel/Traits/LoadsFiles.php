@@ -21,7 +21,10 @@ trait LoadsFiles
         $builder = app(Builder::class);
 
         $model = app(static::class);
-        $builder->file($file, $local)->into($model->getTable());
+
+        $builder->connection($model->getConnectionName())
+            ->file($file, $local)
+            ->into($model->getTable());
 
         $model->loadFileOptions($builder);
 
@@ -32,6 +35,8 @@ trait LoadsFiles
     {
         //
     }
+
+    abstract public function getConnectionName();
 
     abstract public function getTable();
 }
