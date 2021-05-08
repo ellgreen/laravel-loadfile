@@ -102,6 +102,26 @@ class GrammarTest extends TestCase
         SQL);
     }
 
+    public function testLowPriority()
+    {
+        $this->builder->lowPriority();
+
+        $this->assertSqlAndBindings(<<<'SQL'
+            load data low_priority local infile '/path/to/employees.csv'
+            into table `employees` (`forename`, `surname`, `employee_id`)
+        SQL);
+    }
+
+    public function testConcurrent()
+    {
+        $this->builder->concurrent();
+
+        $this->assertSqlAndBindings(<<<'SQL'
+            load data concurrent local infile '/path/to/employees.csv'
+            into table `employees` (`forename`, `surname`, `employee_id`)
+        SQL);
+    }
+
     public function testIgnoreLines()
     {
         $this->builder->ignoreLines(1);

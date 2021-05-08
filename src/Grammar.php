@@ -23,10 +23,21 @@ class Grammar extends MySqlGrammar
             throw CompilationException::noFileOrTableSupplied();
         }
 
-        $querySegments->push([
-            'load data' . ($query->isLocal() ? ' local' : ''),
-            'infile ' . $this->quoteString($file),
-        ]);
+        $querySegments->push('load data');
+
+        if ($query->isLowPriority()) {
+            $querySegments->push('low_priority');
+        }
+
+        if ($query->isConcurrent()) {
+            $querySegments->push('concurrent');
+        }
+
+        if ($query->isLocal()) {
+            $querySegments->push('local');
+        }
+
+        $querySegments->push('infile ' . $this->quoteString($file));
 
         if ($query->isReplace()) {
             $querySegments->push('replace');

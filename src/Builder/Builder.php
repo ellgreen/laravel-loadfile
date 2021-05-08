@@ -11,6 +11,7 @@ use Illuminate\Database\DatabaseManager;
 class Builder
 {
     use Concerns\HasFile;
+    use Concerns\IsLowPriorityOrConcurrent;
     use Concerns\ReplacesOrIgnores;
     use Concerns\HasColumns;
     use Concerns\HasFields;
