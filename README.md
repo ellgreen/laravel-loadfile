@@ -7,6 +7,17 @@ This uses MySQL's LOAD DATA statement to load text files quickly into your datab
 This is usually **20 times** faster than using INSERT statements according to:
 https://dev.mysql.com/doc/refman/8.0/en/insert-optimization.html
 
+### Options
+
+This library currently can handle any of the options in a normal
+LOAD DATA statement except for the partitioned table support. This will
+be included in a future release of laravel-loadfile.
+
+**Further information on the following options that can be passed to the
+load file builder can be found here:**
+
+https://dev.mysql.com/doc/refman/8.0/en/load-data.html
+
 ## Installation
 
 **Requires Laravel 6 or above**
@@ -76,7 +87,7 @@ LoadFile::file('/path/to/employees.csv', $local = true)
     ->load();
 ```
 
-#### Manipulating data on load (set)
+#### Input preprocessing (set)
 
 ```php
 LoadFile::file('/path/to/employees.csv', $local = true)
@@ -101,6 +112,19 @@ LoadFile::connection('mysql')
     ->columns(['forename', 'surname', 'employee_id'])
     ->load();
 ```
+
+#### Duplicate-key and error handling
+
+```php
+LoadFile::connection('mysql')
+    ->file('/path/to/employees.csv', $local = true)
+    ->replace()
+    // or
+    ->ignore()
+    ->into('employees')
+    ->load();
+```
+
 
 ## Loading data into Eloquent Models
 
@@ -137,6 +161,15 @@ class User extends Model
             ->ignoreLines(1);
     }
 }
+```
+
+### Or you can get an instance of the query builder on the fly
+
+```php
+User::loadFileBuilder($file, $local)
+    ->replace()
+    ->ignoreLines(1)
+    ->load();
 ```
 
 ## Development
