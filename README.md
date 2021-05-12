@@ -1,5 +1,8 @@
 # Laravel Load File 💽
 
+[![Latest Stable Version](https://poser.pugx.org/ellgreen/laravel-loadfile/v)](//packagist.org/packages/ellgreen/laravel-loadfile)
+[![License](https://poser.pugx.org/ellgreen/laravel-loadfile/license)](//packagist.org/packages/ellgreen/laravel-loadfile)
+
 A package to help with loading files into MySQL tables.
 
 This uses MySQL's LOAD DATA statement to load text files quickly into your database.
