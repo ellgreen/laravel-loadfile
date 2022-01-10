@@ -7,7 +7,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: php-actions/composer@v5
+      - uses: shivammathur/setup-php@v2
         with:
-          php_version: 8.0
-      - uses: php-actions/phpunit@v3
+          php-version: '8.0'
+      - run: vendor/bin/phpunit
