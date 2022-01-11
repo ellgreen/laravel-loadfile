@@ -21,20 +21,18 @@ jobs:
         with:
           php-version: '8.0'
       - run: composer install --no-interaction
-      - run: vendor/bin/phpunit
+      - run: vendor/bin/psalm
 
   phpunit:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        php: [ 8.0, 7.4 ]
-        laravel: [ 8.*, 7.*, 6.* ]
+        php: [ 7.4 ]
+        laravel: [ 8.*, 6.* ]
         os: [ ubuntu-latest ]
         include:
           - laravel: 8.*
             testbench: ^6.3
-          - laravel: 7.*
-            testbench: ^5.8
           - laravel: 6.*
             testbench: ^4.9
     name: phpunit (P${{ matrix.php }} - L${{ matrix.laravel }})
