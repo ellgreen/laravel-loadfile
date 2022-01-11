@@ -10,7 +10,7 @@ jobs:
       - uses: shivammathur/setup-php@v2
         with:
           php-version: '8.0'
-      - run: composer install --no-interaction
+      - run: composer install --no-interaction --prefer-dist
       - run: vendor/bin/phpcs
 
   psalm:
@@ -20,7 +20,7 @@ jobs:
       - uses: shivammathur/setup-php@v2
         with:
           php-version: '8.0'
-      - run: composer install --no-interaction
+      - run: composer install --no-interaction --prefer-dist
       - run: vendor/bin/psalm
 
   phpunit:
@@ -31,8 +31,8 @@ jobs:
         laravel: [ 8.*, 6.* ]
         os: [ ubuntu-latest ]
         include:
-          - laravel: 8.*
-            testbench: ^6.3
+          - laravel: ^8.0
+            testbench: ^6.0
           - laravel: 6.*
             testbench: ^4.9
     name: phpunit (P${{ matrix.php }} - L${{ matrix.laravel }})
@@ -51,6 +51,6 @@ jobs:
           my-cnf: local_infile=1
       - run: mysql -uroot -h127.0.0.1 -e 'create database loadfile'
       - run: |
-          composer require "laravel/framework:${{ matrix.laravel }}" "orchestra/testbench:${{ matrix.testbench }}" --no-interaction
-          composer update --no-interaction
+          composer require "laravel/framework:${{ matrix.laravel }}" "orchestra/testbench:${{ matrix.testbench }}" --no-interaction --no-update
+          composer update --no-interaction --prefer-dist
       - run: vendor/bin/phpunit
