@@ -1,0 +1,56 @@
+name: test
+
+on: push
+
+jobs:
+  phpcs:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.0'
+      - run: composer install --no-interaction --prefer-dist
+      - run: vendor/bin/phpcs
+
+  psalm:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.0'
+      - run: composer install --no-interaction --prefer-dist
+      - run: vendor/bin/psalm
+
+  phpunit:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        php: [ 7.4, 8.0 ]
+        laravel: [ 8.*, 6.* ]
+        os: [ ubuntu-latest ]
+        include:
+          - laravel: 8.*
+            testbench: ^6.0
+          - laravel: 6.*
+            testbench: ^4.0
+    name: phpunit (P${{ matrix.php }} - L${{ matrix.laravel }})
+    env:
+      DB_HOST: 127.0.0.1
+    steps:
+      - uses: actions/checkout@v2
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+      - uses: shogo82148/actions-setup-mysql@v1
+        with:
+          mysql-version: '8.0'
+          user: loadfile
+          password: loadfile-testing
+          my-cnf: local_infile=1
+      - run: mysql -uroot -h127.0.0.1 -e 'create database loadfile'
+      - run: |
+          composer require "laravel/framework:${{ matrix.laravel }}" "orchestra/testbench:${{ matrix.testbench }}" --no-interaction --no-update
+          composer update --no-interaction --prefer-dist
+      - run: vendor/bin/phpunit
