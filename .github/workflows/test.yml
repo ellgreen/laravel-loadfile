@@ -28,5 +28,6 @@ jobs:
           user: loadfile
           password: loadfile-testing
           my-cnf: local_infile=1
+      - run: mysql -uroot -h127.0.0.1 -e 'create database loadfile'
       - run: composer install --no-interaction
       - run: vendor/bin/phpunit
