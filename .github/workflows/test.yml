@@ -18,6 +18,8 @@ jobs:
     services:
       database:
         image: mysql:latest
+        ports:
+          - 3306:3306
         env:
           MYSQL_ROOT_PASSWORD: loadfile-testing
           MYSQL_DATABASE: loadfile
