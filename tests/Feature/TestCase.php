@@ -25,7 +25,7 @@ abstract class TestCase extends OrchestraTestCase
 
         $config->set('database.connections.mysql', [
             'driver' => 'mysql',
-            'host' => 'database',
+            'host' => env('DB_HOST', 'database'),
             'database' => 'loadfile',
             'username' => 'loadfile',
             'password' => 'loadfile-testing',
