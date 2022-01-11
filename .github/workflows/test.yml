@@ -31,10 +31,10 @@ jobs:
         laravel: [ 8.*, 6.* ]
         os: [ ubuntu-latest ]
         include:
-          - laravel: ^8.0
+          - laravel: 8.*
             testbench: ^6.0
           - laravel: 6.*
-            testbench: ^4.9
+            testbench: ^4.0
     name: phpunit (P${{ matrix.php }} - L${{ matrix.laravel }})
     env:
       DB_HOST: 127.0.0.1
