@@ -17,20 +17,16 @@ jobs:
     runs-on: ubuntu-latest
     env:
       DB_HOST: 127.0.0.1
-    services:
-      database:
-        image: mysql:latest
-        ports:
-          - 3306:3306
-        env:
-          MYSQL_ROOT_PASSWORD: loadfile-testing
-          MYSQL_DATABASE: loadfile
-          MYSQL_USER: loadfile
-          MYSQL_PASSWORD: loadfile-testing
     steps:
       - uses: actions/checkout@v2
       - uses: shivammathur/setup-php@v2
         with:
           php-version: '8.0'
+      - uses: shogo82148/actions-setup-mysql@v1
+        with:
+          mysql-version: '8.0'
+          user: loadfile
+          password: loadfile-testing
+          my-cnf: local_infile=1
       - run: composer install --no-interaction
       - run: vendor/bin/phpunit
