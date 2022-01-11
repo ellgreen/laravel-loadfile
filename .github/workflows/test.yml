@@ -12,3 +12,22 @@ jobs:
           php-version: '8.0'
       - run: composer install --no-interaction
       - run: vendor/bin/phpcs
+
+  phpunit:
+    runs-on: ubuntu-latest
+    services:
+      database:
+        image: mysql:latest
+        options: --local-infile
+        env:
+          MYSQL_ROOT_PASSWORD: loadfile-testing
+          MYSQL_DATABASE: loadfile
+          MYSQL_USER: loadfile
+          MYSQL_PASSWORD: loadfile-testing
+    steps:
+      - uses: actions/checkout@v2
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.0'
+      - run: composer install --no-interaction
+      - run: vendor/bin/phpunit
