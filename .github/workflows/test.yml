@@ -18,7 +18,6 @@ jobs:
     services:
       database:
         image: mysql:latest
-        options: --local-infile
         env:
           MYSQL_ROOT_PASSWORD: loadfile-testing
           MYSQL_DATABASE: loadfile
