@@ -29,4 +29,5 @@ jobs:
         with:
           php-version: '8.0'
       - run: composer install --no-interaction
+      - run: sudo echo "127.0.0.1 database" >> /etc/hosts
       - run: vendor/bin/phpunit
