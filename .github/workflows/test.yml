@@ -28,7 +28,7 @@ jobs:
     strategy:
       matrix:
         php: [ 8.0, 8.1 ]
-        laravel: [ 9.*, 8.*, 6.* ]
+        laravel: [ 9.*, 8.* ]
         os: [ ubuntu-latest ]
         include:
           - laravel: 9.*
