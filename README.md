@@ -23,7 +23,7 @@ https://dev.mysql.com/doc/refman/8.0/en/load-data.html
 
 ## Installation
 
-**Requires Laravel 6 or above**
+**Requires > PHP 8.0 and > Laravel 8**
 
 ```bash
 composer require ellgreen/laravel-loadfile
