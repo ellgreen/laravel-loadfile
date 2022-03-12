@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\DB;
 
 class LoadFileTest extends TestCase
 {
-    public function testSimpleLoad()
+    public function testSimpleLoad(): void
     {
         LoadFile::connection('mysql')
             ->file(realpath(__DIR__ . '/../data/people-simple.csv'), true)
@@ -21,7 +21,7 @@ class LoadFileTest extends TestCase
         $this->assertJohnAndJaneExist();
     }
 
-    public function testLoadWithSet()
+    public function testLoadWithSet(): void
     {
         LoadFile::file(realpath(__DIR__ . '/../data/people.csv'), true)
             ->into('people')
@@ -47,7 +47,7 @@ class LoadFileTest extends TestCase
         ]);
     }
 
-    public function testIgnoreRow()
+    public function testIgnoreRow(): void
     {
         LoadFile::file(realpath(__DIR__ . '/../data/people-simple.csv'), true)
             ->into('people')
@@ -69,7 +69,7 @@ class LoadFileTest extends TestCase
         ]);
     }
 
-    public function testReplace()
+    public function testReplace(): void
     {
         LoadFile::file(realpath(__DIR__ . '/../data/people-simple.csv'), true)
             ->replace()
@@ -81,7 +81,7 @@ class LoadFileTest extends TestCase
         $this->assertJohnAndJaneExist();
     }
 
-    public function testIgnore()
+    public function testIgnore(): void
     {
         LoadFile::file(realpath(__DIR__ . '/../data/people-simple.csv'), true)
             ->ignore()
@@ -115,6 +115,24 @@ class LoadFileTest extends TestCase
             ->load();
 
         $this->assertJohnAndJaneExist();
+    }
+
+    /**
+     * Related to Issue #10
+     * https://github.com/ellgreen/laravel-loadfile/issues/10
+     */
+    public function testFileWithNullStrings(): void
+    {
+        LoadFile::file(realpath(__DIR__ . '/../data/people-with-null-strings.csv'), true)
+            ->into('people')
+            ->columns(['name', 'dob', 'greeting'])
+            ->fieldsTerminatedBy(',')
+            ->load();
+
+        $rows = DB::table('people')->pluck('greeting');
+
+        $this->assertSame('null', $rows[0]);
+        $this->assertSame('NULL', $rows[1]);
     }
 
     private function assertJohnAndJaneExist(): void
