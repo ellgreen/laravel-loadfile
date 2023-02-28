@@ -9,32 +9,32 @@ jobs:
       - uses: actions/checkout@v2
       - uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.0'
+          php-version: '8.1'
       - run: composer install --no-interaction --prefer-dist
       - run: vendor/bin/phpcs
 
-  psalm:
+  phpstan:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.0'
+          php-version: '8.1'
       - run: composer install --no-interaction --prefer-dist
-      - run: vendor/bin/psalm
+      - run: vendor/bin/phpstan analyse
 
   phpunit:
-    runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        php: [ 8.0, 8.1 ]
-        laravel: [ 9.*, 8.* ]
+        php: [ 8.2, 8.1 ]
+        laravel: [ 10.*, 9.* ]
         os: [ ubuntu-latest ]
         include:
+          - laravel: 10.*
+            testbench: ^8.0
           - laravel: 9.*
             testbench: ^7.0
-          - laravel: 8.*
-            testbench: ^6.0
+    runs-on: ${{ matrix.os }}
     name: phpunit (P${{ matrix.php }} - L${{ matrix.laravel }})
     env:
       DB_HOST: 127.0.0.1

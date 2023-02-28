@@ -23,7 +23,9 @@ https://dev.mysql.com/doc/refman/8.0/en/load-data.html
 
 ## Installation
 
-**Requires > PHP 8.0 and > Laravel 8**
+**Requires > PHP 8.1 and > Laravel 9**
+
+*Older versions of Laravel and PHP are supported through previous major versions of this library*
 
 ```bash
 composer require ellgreen/laravel-loadfile
