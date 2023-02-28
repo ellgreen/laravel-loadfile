@@ -24,7 +24,6 @@ jobs:
       - run: vendor/bin/phpstan analyse
 
   phpunit:
-    runs-on: ${{ matrix.os }}
     strategy:
       matrix:
         php: [ 8.2, 8.1 ]
@@ -35,8 +34,7 @@ jobs:
             testbench: ^8.0
           - laravel: 9.*
             testbench: ^7.0
-          - laravel: 8.*
-            testbench: ^6.0
+    runs-on: ${{ matrix.os }}
     name: phpunit (P${{ matrix.php }} - L${{ matrix.laravel }})
     env:
       DB_HOST: 127.0.0.1
