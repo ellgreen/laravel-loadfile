@@ -27,10 +27,12 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        php: [ 8.0, 8.1 ]
-        laravel: [ 9.*, 8.* ]
+        php: [ 8.2, 8.1 ]
+        laravel: [ 10.*, 9.* ]
         os: [ ubuntu-latest ]
         include:
+          - laravel: 10.*
+            testbench: ^8.0
           - laravel: 9.*
             testbench: ^7.0
           - laravel: 8.*
