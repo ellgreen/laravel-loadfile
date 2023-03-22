@@ -18,6 +18,7 @@ class Builder
     use Concerns\HasLines;
     use Concerns\IgnoresLines;
     use Concerns\SetsValues;
+    use Concerns\HasXmlRows;
 
     private DatabaseManager $databaseManager;
     private Grammar $grammar;

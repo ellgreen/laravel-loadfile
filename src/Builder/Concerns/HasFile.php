@@ -8,10 +8,12 @@ trait HasFile
     private bool $local = false;
     private ?string $table = null;
     private ?string $charset = null;
+    private ?string $extension = null;
 
     public function file(string $file, ?bool $local = null): self
     {
         $this->file = $file;
+        $this->extension = strtolower(pathinfo($file, PATHINFO_EXTENSION));
 
         if (isset($local)) {
             $this->local($local);
@@ -56,5 +58,10 @@ trait HasFile
     public function getCharset(): ?string
     {
         return $this->charset;
+    }
+
+    public function isXML(): bool
+    {
+        return $this->extension === 'xml';
     }
 }
