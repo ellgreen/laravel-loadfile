@@ -41,7 +41,7 @@ class HasFileTest extends TestCase
     {
         $this->loadsFiles->fileType(FileType::XML);
 
-        self::assertSame(FileType::XML, $this->loadsFiles->getFileType());
+        $this->assertSame(FileType::XML, $this->loadsFiles->getFileType());
     }
 
     public function testSetTable()
