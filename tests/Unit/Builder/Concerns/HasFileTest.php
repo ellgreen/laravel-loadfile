@@ -3,6 +3,7 @@
 namespace Tests\Unit\Builder\Concerns;
 
 use EllGreen\LaravelLoadFile\Builder\Concerns\HasFile;
+use EllGreen\LaravelLoadFile\Builder\FileType;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -24,6 +25,23 @@ class HasFileTest extends TestCase
 
         $this->assertSame($path, $this->loadsFiles->getFile());
         $this->assertTrue($this->loadsFiles->isLocal());
+        $this->assertSame(FileType::CSV, $this->loadsFiles->getFileType());
+    }
+
+    public function testSetXmlFile()
+    {
+        $this->loadsFiles->xml($path = '/path/to/file', true);
+
+        $this->assertSame($path, $this->loadsFiles->getFile());
+        $this->assertTrue($this->loadsFiles->isLocal());
+        $this->assertSame(FileType::XML, $this->loadsFiles->getFileType());
+    }
+
+    public function testSetFileType()
+    {
+        $this->loadsFiles->fileType(FileType::XML);
+
+        self::assertSame(FileType::XML, $this->loadsFiles->getFileType());
     }
 
     public function testSetTable()

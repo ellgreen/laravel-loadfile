@@ -11,8 +11,8 @@ class LoadFileXMLTest extends TestCase
     public function testSimpleLoad()
     {
         LoadFile::connection('mysql')
-            ->file(realpath(__DIR__ . '/../data/xml/people-simple.xml'), true)
-            ->rowIdentifiedBy('<person>')
+            ->xml(realpath(__DIR__ . '/../data/xml/people-simple.xml'), true)
+            ->rowsIdentifiedBy('<person>')
             ->into('people')
             ->charset('utf8mb4')
             ->columns(['name', 'dob', 'greeting'])
@@ -23,9 +23,9 @@ class LoadFileXMLTest extends TestCase
 
     public function testLoadWithSet()
     {
-        LoadFile::file(realpath(__DIR__ . '/../data/xml/people.xml'), true)
+        LoadFile::xml(realpath(__DIR__ . '/../data/xml/people.xml'), true)
             ->into('people')
-            ->rowIdentifiedBy('<person>')
+            ->rowsIdentifiedBy('<person>')
             ->columns([DB::raw('@forename'), DB::raw('@surname'), 'dob'])
             ->set([
                 'greeting' => 'Hello',
@@ -49,13 +49,11 @@ class LoadFileXMLTest extends TestCase
 
     public function testIgnoreRow()
     {
-        self::markTestSkipped('Add support for ignore rows');
-
-        LoadFile::file(realpath(__DIR__ . '/../data/xml/people-simple.xml'), true)
+        LoadFile::xml(realpath(__DIR__ . '/../data/xml/people-simple.xml'), true)
+            ->rowsIdentifiedBy('<person>')
             ->into('people')
             ->ignoreLines(1)
             ->columns(['name', 'dob', 'greeting'])
-            ->fields(',', '"', '\\\\', true)
             ->load();
 
         $this->assertDatabaseMissing('people', [
@@ -73,8 +71,8 @@ class LoadFileXMLTest extends TestCase
 
     public function testReplace()
     {
-        LoadFile::file(realpath(__DIR__ . '/../data/xml/people-simple.xml'), true)
-            ->rowIdentifiedBy('<person>')
+        LoadFile::xml(realpath(__DIR__ . '/../data/xml/people-simple.xml'), true)
+            ->rowsIdentifiedBy('<person>')
             ->replace()
             ->into('people')
             ->columns(['name', 'dob', 'greeting'])
@@ -85,8 +83,8 @@ class LoadFileXMLTest extends TestCase
 
     public function testIgnore()
     {
-        LoadFile::file(realpath(__DIR__ . '/../data/xml/people-simple.xml'), true)
-            ->rowIdentifiedBy('<person>')
+        LoadFile::xml(realpath(__DIR__ . '/../data/xml/people-simple.xml'), true)
+            ->rowsIdentifiedBy('<person>')
             ->ignore()
             ->into('people')
             ->columns(['name', 'dob', 'greeting'])
@@ -97,12 +95,11 @@ class LoadFileXMLTest extends TestCase
 
     public function testLowPriority(): void
     {
-        LoadFile::file(realpath(__DIR__ . '/../data/xml/people-simple.xml'), true)
-            ->rowIdentifiedBy('<person>')
+        LoadFile::xml(realpath(__DIR__ . '/../data/xml/people-simple.xml'), true)
+            ->rowsIdentifiedBy('<person>')
             ->lowPriority()
             ->into('people')
             ->columns(['name', 'dob', 'greeting'])
-            ->fieldsTerminatedBy(',')
             ->load();
 
         $this->assertJohnAndJaneExist();
@@ -110,12 +107,11 @@ class LoadFileXMLTest extends TestCase
 
     public function testConcurrent(): void
     {
-        LoadFile::file(realpath(__DIR__ . '/../data/xml/people-simple.xml'), true)
-            ->rowIdentifiedBy('<person>')
+        LoadFile::xml(realpath(__DIR__ . '/../data/xml/people-simple.xml'), true)
+            ->rowsIdentifiedBy('<person>')
             ->concurrent()
             ->into('people')
             ->columns(['name', 'dob', 'greeting'])
-            ->fieldsTerminatedBy(',')
             ->load();
 
         $this->assertJohnAndJaneExist();

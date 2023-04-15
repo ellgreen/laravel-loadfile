@@ -3,6 +3,7 @@
 namespace EllGreen\LaravelLoadFile;
 
 use EllGreen\LaravelLoadFile\Builder\Builder;
+use EllGreen\LaravelLoadFile\Builder\FileType;
 use EllGreen\LaravelLoadFile\Exceptions\CompilationException;
 use Illuminate\Database\Query\Grammars\MySqlGrammar;
 
@@ -23,11 +24,7 @@ class Grammar extends MySqlGrammar
             throw CompilationException::noFileOrTableSupplied();
         }
 
-        if ($query->isXML()) {
-            $querySegments->push('load xml');
-        } else {
-            $querySegments->push('load data');
-        }
+        $querySegments->push('load ' . $query->getFileType()->value);
 
         if ($query->isLowPriority()) {
             $querySegments->push('low_priority');
@@ -57,7 +54,7 @@ class Grammar extends MySqlGrammar
             $querySegments->push('character set ' . $this->quoteString($charset));
         }
 
-        if (!$query->isXML()) {
+        if ($query->getFileType() !== FileType::XML) {
             $querySegments->push($this->compileFields(
                 $query->getFieldsTerminatedBy(),
                 $query->getFieldsEnclosedBy(),
@@ -66,14 +63,14 @@ class Grammar extends MySqlGrammar
             ));
 
             $querySegments->push($this->compileLines($query->getLinesStartingBy(), $query->getLinesTerminatedBy()));
-
-            if ($query->getIgnoreLines() > 0) {
-                $querySegments->push("ignore {$query->getIgnoreLines()} lines");
-            }
         }
 
-        if ($query->isXML()) {
-            $querySegments->push('rows identified by ' . $this->quoteString($query->getRowIdentifier()));
+        if ($query->getFileType() === FileType::XML && ! empty($query->getRowsIdentifiedBy())) {
+            $querySegments->push('rows identified by ' . $this->quoteString($query->getRowsIdentifiedBy()));
+        }
+
+        if ($query->getIgnoreLines() > 0) {
+            $querySegments->push("ignore {$query->getIgnoreLines()} lines");
         }
 
         $columns = $query->getColumns();

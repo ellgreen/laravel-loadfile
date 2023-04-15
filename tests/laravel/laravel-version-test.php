@@ -6,7 +6,7 @@ const TEST_PATH = '/tmp/laravel/app/';
 $composerConfig = json_decode(file_get_contents('/app/composer.json'), $assoc = true);
 
 $laravelVersions = array_map(function ($version) {
-    return trim($version, '^<>.0');
+    return trim($version, '^');
 }, explode('|', $composerConfig['require']['illuminate/database']));
 
 passthru('rsync --delete -a --exclude=vendor/ --exclude=.*/ /app ' . dirname(TEST_PATH));

@@ -2,21 +2,23 @@
 
 namespace EllGreen\LaravelLoadFile\Builder\Concerns;
 
+use EllGreen\LaravelLoadFile\Builder\Builder;
+
 trait HasXmlRows
 {
-    private string $rowIdentifier;
+    private ?string $rowsIdentifiedBy = null;
 
     /**
-     * @param string $tag XML tag to identify rows, like: <item>
+     * @param ?string $rowsIdentifiedBy XML tag to identify rows, like: <item>
      */
-    public function rowIdentifiedBy(string $tag): self
+    public function rowsIdentifiedBy(?string $rowsIdentifiedBy): self
     {
-        $this->rowIdentifier = $tag;
+        $this->rowsIdentifiedBy = $rowsIdentifiedBy;
         return $this;
     }
 
-    public function getRowIdentifier(): string
+    public function getRowsIdentifiedBy(): ?string
     {
-        return $this->rowIdentifier;
+        return $this->rowsIdentifiedBy;
     }
 }

@@ -3,6 +3,7 @@
 namespace Tests\Unit;
 
 use EllGreen\LaravelLoadFile\Builder\Builder;
+use EllGreen\LaravelLoadFile\Builder\FileType;
 use EllGreen\LaravelLoadFile\Exceptions\CompilationException;
 use EllGreen\LaravelLoadFile\Grammar;
 use Illuminate\Database\DatabaseManager;
@@ -70,6 +71,28 @@ class GrammarTest extends TestCase
         $this->assertSqlAndBindings(<<<'SQL'
             load data local infile '/path/to/employees.csv'
             into table `employees` (`forename`, `surname`, `employee_id`)
+        SQL);
+    }
+
+    public function testSimpleXmlCompile()
+    {
+        $this->builder->fileType(FileType::XML);
+
+        $this->assertSqlAndBindings(<<<'SQL'
+            load xml local infile '/path/to/employees.csv'
+            into table `employees` (`forename`, `surname`, `employee_id`)
+        SQL);
+    }
+
+    public function testCompileWithRowsIdentifiedBy()
+    {
+        $this->builder->fileType(FileType::XML)
+            ->rowsIdentifiedBy('<tag>');
+
+        $this->assertSqlAndBindings(<<<'SQL'
+            load xml local infile '/path/to/employees.csv' into table `employees`
+            rows identified by '<tag>'
+            (`forename`, `surname`, `employee_id`)
         SQL);
     }
 
