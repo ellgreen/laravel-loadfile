@@ -53,6 +53,18 @@ LoadFile::file('/path/to/employees.csv', $local = true)
     ->load();
 ```
 
+#### XML file import
+
+```php
+use EllGreen\LaravelLoadFile\Laravel\Facades\LoadFile;
+
+LoadFile::xml('/path/to/employees.xml', $local = true)
+    ->rowsIdentifiedBy('<tag-name>')
+    ->into('employees')
+    ->columns(['forename', 'surname', 'employee_id'])
+    ->load();
+```
+
 #### Ignoring header row
 
 ```php
