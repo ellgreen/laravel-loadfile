@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<people>
+    <person>
+        <forename>John</forename>
+        <surname>Doe</surname>
+        <dob>1980-01-01</dob>
+    </person>
+    <person>
+        <forename>Jane</forename>
+        <surname>Doe</surname>
+        <dob>1975-06-30</dob>
+    </person>
+</people>

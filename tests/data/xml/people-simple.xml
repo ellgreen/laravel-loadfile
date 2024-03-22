@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<people>
+    <person>
+        <name>John Doe</name>
+        <dob>1980-01-01</dob>
+        <greeting>Bonjour</greeting>
+    </person>
+    <person>
+        <name>Jane Doe</name>
+        <dob>1975-06-30</dob>
+        <greeting>Hello</greeting>
+    </person>
+</people>

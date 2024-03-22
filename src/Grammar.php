@@ -23,7 +23,11 @@ class Grammar extends MySqlGrammar
             throw CompilationException::noFileOrTableSupplied();
         }
 
-        $querySegments->push('load data');
+        if ($query->isXML()) {
+            $querySegments->push('load xml');
+        } else {
+            $querySegments->push('load data');
+        }
 
         if ($query->isLowPriority()) {
             $querySegments->push('low_priority');
@@ -53,17 +57,23 @@ class Grammar extends MySqlGrammar
             $querySegments->push('character set ' . $this->quoteString($charset));
         }
 
-        $querySegments->push($this->compileFields(
-            $query->getFieldsTerminatedBy(),
-            $query->getFieldsEnclosedBy(),
-            $query->getFieldsEscapedBy(),
-            $query->getFieldsOptionallyEnclosed(),
-        ));
+        if (!$query->isXML()) {
+            $querySegments->push($this->compileFields(
+                $query->getFieldsTerminatedBy(),
+                $query->getFieldsEnclosedBy(),
+                $query->getFieldsEscapedBy(),
+                $query->getFieldsOptionallyEnclosed(),
+            ));
 
-        $querySegments->push($this->compileLines($query->getLinesStartingBy(), $query->getLinesTerminatedBy()));
+            $querySegments->push($this->compileLines($query->getLinesStartingBy(), $query->getLinesTerminatedBy()));
 
-        if ($query->getIgnoreLines() > 0) {
-            $querySegments->push("ignore {$query->getIgnoreLines()} lines");
+            if ($query->getIgnoreLines() > 0) {
+                $querySegments->push("ignore {$query->getIgnoreLines()} lines");
+            }
+        }
+
+        if ($query->isXML()) {
+            $querySegments->push('rows identified by ' . $this->quoteString($query->getRowIdentifier()));
         }
 
         $columns = $query->getColumns();
