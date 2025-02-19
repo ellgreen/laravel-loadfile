@@ -28,19 +28,14 @@ jobs:
   phpunit:
     strategy:
       matrix:
-        php: [8.2, 8.1]
-        laravel: ["9.*", "10.*", "11.*"]
+        php: [8.3, 8.2]
+        laravel: ["10.*", "11.*"]
         os: [ubuntu-latest]
         include:
           - laravel: 10.*
             testbench: ^8.0
-          - laravel: 9.*
-            testbench: ^7.0
           - laravel: 11.*
             testbench: ^9.0
-        exclude:
-          - laravel: 11.*
-            php: 8.1
     runs-on: ${{ matrix.os }}
     name: phpunit (P${{ matrix.php }} - L${{ matrix.laravel }})
     env:
