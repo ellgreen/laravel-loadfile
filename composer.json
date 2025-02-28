@@ -33,7 +33,7 @@
     "scripts": {
         "lint": "@php ./vendor/bin/pint",
         "static": "@php ./vendor/bin/phpstan analyse",
-        "test-unit": "@php ./vendor/bin/pest --colors=always --coverage --min=90 tests/Unit",
+        "test-unit": "@php ./vendor/bin/pest --coverage --min=90 tests/Unit",
         "check": [
             "@lint",
             "@static",
