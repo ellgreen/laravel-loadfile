@@ -179,16 +179,20 @@ User::loadFileBuilder($file, $local)
 
 ## Development
 
-### Unit tests
+### Check
 
-```bash
-composer test-unit
+Runs linting, static analysis, and unit tests.
+
+```shell
+composer check
 ```
 
 ### All tests
 
+Runs unit and feature tests against all support Laravel versions.
+
 **You will need to have [docker](https://www.docker.com/) installed for these.**
 
-```bash
-composer check
+```shell
+composer test
 ```

@@ -23,7 +23,7 @@ foreach ($laravelVersions as $laravelVersion) {
     file_put_contents(TEST_PATH.'composer.json', json_encode($composerConfig, JSON_PRETTY_PRINT));
 
     exec('composer update');
-    passthru('php ./vendor/bin/pest --colors=always', $resultCode);
+    passthru('php ./vendor/bin/pest --coverage --min=100', $resultCode);
 
     if ($resultCode !== 0) {
         echo "\n\nTests failed for Laravel {$laravelVersion}\n";
