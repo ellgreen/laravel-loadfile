@@ -9,6 +9,7 @@ trait IgnoresLines
     public function ignoreLines(int $count): self
     {
         $this->ignoreLines = $count;
+
         return $this;
     }
 

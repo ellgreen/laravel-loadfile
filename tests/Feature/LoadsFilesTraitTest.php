@@ -8,42 +8,42 @@ use Tests\Feature\Models\TestUserNoOptions;
 
 class LoadsFilesTraitTest extends TestCase
 {
-    public function testGetBuilder(): void
+    public function test_get_builder(): void
     {
         $builder = TestUser::loadFileBuilder('/path/to/test_users.csv', true);
 
         $this->assertSame('test_users', $builder->getTable());
     }
 
-    public function testGetBuilderWithOptions(): void
+    public function test_get_builder_with_options(): void
     {
         $builder = TestUser::loadFileBuilder('/path/to/test_users.csv', true);
 
         $this->assertTrue($builder->isReplace());
     }
 
-    public function testDefaultLoadFileOptions(): void
+    public function test_default_load_file_options(): void
     {
         $builder = TestUserNoOptions::loadFileBuilder('/path/to/test_users.csv', true);
 
         $this->assertFalse($builder->isReplace());
     }
 
-    public function testLoadFileIsUsingModelConnection(): void
+    public function test_load_file_is_using_model_connection(): void
     {
         $builder = TestUser::loadFileBuilder('/path/to/test_users.csv', true);
 
         $this->assertSame('test-connection', $builder->getConnectionName());
     }
 
-    public function testLoadFileIsUsingModelConnectionNull(): void
+    public function test_load_file_is_using_model_connection_null(): void
     {
         $builder = TestUserNoOptions::loadFileBuilder('/path/to/test_users.csv', true);
 
         $this->assertNull($builder->getConnectionName());
     }
 
-    public function testLoadFile(): void
+    public function test_load_file(): void
     {
         $this->instance(Builder::class, $builder = $this->createPartialMock(Builder::class, [
             'load',

@@ -3,47 +3,47 @@
 namespace Tests\Unit\Builder\Concerns;
 
 use EllGreen\LaravelLoadFile\Builder\Concerns\HasFile;
-use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class HasFileTest extends TestCase
 {
-    /** @var MockObject|HasFile */
-    private MockObject $loadsFiles;
+    /** @var HasFile */
+    private $hasFile;
 
     protected function setUp(): void
     {
-        parent::setUp();
-
-        $this->loadsFiles = $this->getMockForTrait(HasFile::class);
+        $this->hasFile = new class
+        {
+            use HasFile;
+        };
     }
 
-    public function testSetFile()
+    public function test_set_file(): void
     {
-        $this->loadsFiles->file($path = '/path/to/file', true);
+        $this->hasFile->file($path = '/path/to/file', true);
 
-        $this->assertSame($path, $this->loadsFiles->getFile());
-        $this->assertTrue($this->loadsFiles->isLocal());
+        $this->assertSame($path, $this->hasFile->getFile());
+        $this->assertTrue($this->hasFile->isLocal());
     }
 
-    public function testSetTable()
+    public function test_set_table(): void
     {
-        $this->loadsFiles->into($table = 'table');
+        $this->hasFile->into($table = 'table');
 
-        $this->assertSame($table, $this->loadsFiles->getTable());
+        $this->assertSame($table, $this->hasFile->getTable());
     }
 
-    public function testSetLocal()
+    public function test_set_local(): void
     {
-        $this->loadsFiles->local(true);
+        $this->hasFile->local(true);
 
-        $this->assertTrue($this->loadsFiles->isLocal());
+        $this->assertTrue($this->hasFile->isLocal());
     }
 
-    public function testSetCharset()
+    public function test_set_charset(): void
     {
-        $this->loadsFiles->charset($charset = 'utf8mb4');
+        $this->hasFile->charset($charset = 'utf8mb4');
 
-        $this->assertSame($charset, $this->loadsFiles->getCharset());
+        $this->assertSame($charset, $this->hasFile->getCharset());
     }
 }

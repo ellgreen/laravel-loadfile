@@ -3,22 +3,22 @@
 namespace Tests\Unit\Builder\Concerns;
 
 use EllGreen\LaravelLoadFile\Builder\Concerns\ReplacesOrIgnores;
-use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class ReplacesOrIgnoresTest extends TestCase
 {
-    /** @var MockObject|ReplacesOrIgnores */
-    private MockObject $replacesOrIgnores;
+    /** @var ReplacesOrIgnores */
+    private $replacesOrIgnores;
 
     protected function setUp(): void
     {
-        parent::setUp();
-
-        $this->replacesOrIgnores = $this->getMockForTrait(ReplacesOrIgnores::class);
+        $this->replacesOrIgnores = new class
+        {
+            use ReplacesOrIgnores;
+        };
     }
 
-    public function testSetReplace()
+    public function test_set_replace(): void
     {
         $this->replacesOrIgnores->ignore()->replace();
 
@@ -26,7 +26,7 @@ class ReplacesOrIgnoresTest extends TestCase
         $this->assertFalse($this->replacesOrIgnores->isIgnore());
     }
 
-    public function testSetIgnore()
+    public function test_set_ignore(): void
     {
         $this->replacesOrIgnores->replace()->ignore();
 

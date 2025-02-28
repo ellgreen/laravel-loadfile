@@ -5,6 +5,7 @@ namespace EllGreen\LaravelLoadFile\Builder\Concerns;
 trait ReplacesOrIgnores
 {
     private bool $replace = false;
+
     private bool $ignore = false;
 
     public function replace(bool $replace = true): self

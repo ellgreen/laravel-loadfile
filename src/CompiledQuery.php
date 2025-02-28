@@ -5,6 +5,7 @@ namespace EllGreen\LaravelLoadFile;
 class CompiledQuery
 {
     private string $sql;
+
     private array $bindings;
 
     public function __construct(string $sql, array $bindings = [])

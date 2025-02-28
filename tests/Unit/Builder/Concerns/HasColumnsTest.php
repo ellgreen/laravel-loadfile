@@ -3,15 +3,16 @@
 namespace Tests\Unit\Builder\Concerns;
 
 use EllGreen\LaravelLoadFile\Builder\Concerns\HasColumns;
-use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class HasColumnsTest extends TestCase
 {
-    public function testSetColumns()
+    public function test_set_columns(): void
     {
-        /** @var MockObject|HasColumns $hasColumns */
-        $hasColumns = $this->getMockForTrait(HasColumns::class);
+        $hasColumns = new class
+        {
+            use HasColumns;
+        };
 
         $hasColumns->columns($columns = ['column_1', 'column_2']);
 

@@ -1,5 +1,3 @@
-version: "3.9"
-
 services:
   app:
     build: ./tests/docker
@@ -9,9 +7,8 @@ services:
     working_dir: /app
 
   database:
-    image: mysql:latest
-    command:
-      --local-infile
+    image: mysql:8.0
+    command: --local-infile
     environment:
       MYSQL_ROOT_PASSWORD: loadfile-testing
       MYSQL_DATABASE: loadfile

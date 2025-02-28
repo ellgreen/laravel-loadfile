@@ -3,36 +3,36 @@
 namespace Tests\Unit\Builder\Concerns;
 
 use EllGreen\LaravelLoadFile\Builder\Concerns\HasLines;
-use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class HasLinesTest extends TestCase
 {
-    /** @var MockObject|HasLines */
-    private MockObject $hasLines;
+    /** @var HasLines */
+    private $hasLines;
 
     protected function setUp(): void
     {
-        parent::setUp();
-
-        $this->hasLines = $this->getMockForTrait(HasLines::class);
+        $this->hasLines = new class
+        {
+            use HasLines;
+        };
     }
 
-    public function testSetLinesStartingBy()
+    public function test_set_lines_starting_by(): void
     {
         $this->hasLines->linesStartingBy('');
 
         $this->assertSame('', $this->hasLines->getLinesStartingBy());
     }
 
-    public function testSetLinesTerminatedBy()
+    public function test_set_lines_terminated_by(): void
     {
         $this->hasLines->linesTerminatedBy('\\n');
 
         $this->assertSame('\\n', $this->hasLines->getLinesTerminatedBy());
     }
 
-    public function testSetLines()
+    public function test_set_lines(): void
     {
         $this->hasLines->lines('', '\\n');
 

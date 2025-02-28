@@ -9,6 +9,7 @@ trait SetsValues
     public function set(?array $set): self
     {
         $this->set = $set;
+
         return $this;
     }
 

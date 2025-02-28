@@ -11,7 +11,6 @@ use Illuminate\Support\Facades\Facade;
  * @method static Builder into(string $table)
  *
  * @see Builder
- * @package EllGreen\LaravelLoadFile\Laravel\Facades
  */
 class LoadFile extends Facade
 {
