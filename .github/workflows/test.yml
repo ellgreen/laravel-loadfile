@@ -13,7 +13,7 @@ jobs:
         with:
           php-version: "8.2"
       - run: composer install --no-interaction --prefer-dist
-      - run: vendor/bin/phpcs
+      - run: vendor/bin/pint --test
 
   phpstan:
     runs-on: ubuntu-latest
@@ -28,14 +28,10 @@ jobs:
   phpunit:
     strategy:
       matrix:
-        php: [8.3, 8.2, 8.3]
-        laravel: ["10.*", "11.*", "12.*"]
+        php: [8.2, 8.3, 8.4]
+        laravel: ["12.*"]
         os: [ubuntu-latest]
         include:
-          - laravel: 10.*
-            testbench: ^8.0
-          - laravel: 11.*
-            testbench: ^9.0
           - laravel: 12.*
             testbench: ^10.0
     runs-on: ${{ matrix.os }}
@@ -57,4 +53,4 @@ jobs:
       - run: |
           composer require "laravel/framework:${{ matrix.laravel }}" "orchestra/testbench:${{ matrix.testbench }}" --no-interaction --no-update
           composer update --no-interaction --prefer-dist
-      - run: vendor/bin/phpunit
+      - run: vendor/bin/pest

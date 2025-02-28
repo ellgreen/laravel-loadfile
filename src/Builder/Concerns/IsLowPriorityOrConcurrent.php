@@ -5,6 +5,7 @@ namespace EllGreen\LaravelLoadFile\Builder\Concerns;
 trait IsLowPriorityOrConcurrent
 {
     private bool $lowPriority = false;
+
     private bool $concurrent = false;
 
     public function lowPriority(bool $lowPriority = true): self

@@ -5,13 +5,17 @@ namespace EllGreen\LaravelLoadFile\Builder\Concerns;
 trait HasFields
 {
     private ?string $fieldsTerminatedBy = null;
+
     private ?string $fieldsEnclosedBy = null;
+
     private bool $fieldsOptionallyEnclosed = false;
+
     private ?string $fieldsEscapedBy = null;
 
     public function fieldsTerminatedBy(?string $terminatedBy): self
     {
         $this->fieldsTerminatedBy = $terminatedBy;
+
         return $this;
     }
 
@@ -29,12 +33,14 @@ trait HasFields
     public function fieldsOptionallyEnclosed(bool $optionallyEnclosed): self
     {
         $this->fieldsOptionallyEnclosed = $optionallyEnclosed;
+
         return $this;
     }
 
     public function fieldsEscapedBy(?string $escapedBy): self
     {
         $this->fieldsEscapedBy = $escapedBy;
+
         return $this;
     }
 

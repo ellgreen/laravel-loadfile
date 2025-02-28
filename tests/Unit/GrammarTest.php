@@ -5,6 +5,7 @@ namespace Tests\Unit;
 use EllGreen\LaravelLoadFile\Builder\Builder;
 use EllGreen\LaravelLoadFile\Exceptions\CompilationException;
 use EllGreen\LaravelLoadFile\Grammar;
+use Illuminate\Database\Connection;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Database\Query\Expression;
 use PHPUnit\Framework\TestCase;
@@ -12,16 +13,17 @@ use PHPUnit\Framework\TestCase;
 class GrammarTest extends TestCase
 {
     private Grammar $grammar;
+
     private Builder $builder;
 
     protected function setUp(): void
     {
         parent::setUp();
 
-        $this->grammar = new Grammar();
+        $connection = $this->createMock(Connection::class);
+        $this->grammar = new Grammar($connection);
         $this->builder = new Builder(
             $this->createMock(DatabaseManager::class),
-            $this->createMock(Grammar::class),
         );
 
         $this->builder->file('/path/to/employees.csv', $local = true)
@@ -29,43 +31,40 @@ class GrammarTest extends TestCase
             ->columns(['forename', 'surname', 'employee_id']);
     }
 
-    public function testNoFileThrowsException()
+    public function test_no_file_throws_exception()
     {
         $this->expectException(CompilationException::class);
 
         $builder = (new Builder(
             $this->createMock(DatabaseManager::class),
-            $this->createMock(Grammar::class),
         ))->into('table');
 
         $this->grammar->compileLoadFile($builder);
     }
 
-    public function testNoTableThrowsException()
+    public function test_no_table_throws_exception()
     {
         $this->expectException(CompilationException::class);
 
         $builder = (new Builder(
             $this->createMock(DatabaseManager::class),
-            $this->createMock(Grammar::class),
         ))->file('path/to/file');
 
         $this->grammar->compileLoadFile($builder);
     }
 
-    public function testNoTableOrFileThrowsException()
+    public function test_no_table_or_file_throws_exception()
     {
         $this->expectException(CompilationException::class);
 
         $builder = new Builder(
             $this->createMock(DatabaseManager::class),
-            $this->createMock(Grammar::class),
         );
 
         $this->grammar->compileLoadFile($builder);
     }
 
-    public function testSimpleCompile()
+    public function test_simple_compile()
     {
         $this->assertSqlAndBindings(<<<'SQL'
             load data local infile '/path/to/employees.csv'
@@ -73,7 +72,7 @@ class GrammarTest extends TestCase
         SQL);
     }
 
-    public function testCompileWithNoColumns()
+    public function test_compile_with_no_columns()
     {
         $this->builder->columns(null);
 
@@ -82,7 +81,7 @@ class GrammarTest extends TestCase
         SQL);
     }
 
-    public function testReplace()
+    public function test_replace()
     {
         $this->builder->replace();
 
@@ -92,7 +91,7 @@ class GrammarTest extends TestCase
         SQL);
     }
 
-    public function testIgnore()
+    public function test_ignore()
     {
         $this->builder->ignore();
 
@@ -102,7 +101,7 @@ class GrammarTest extends TestCase
         SQL);
     }
 
-    public function testLowPriority()
+    public function test_low_priority()
     {
         $this->builder->lowPriority();
 
@@ -112,7 +111,7 @@ class GrammarTest extends TestCase
         SQL);
     }
 
-    public function testConcurrent()
+    public function test_concurrent()
     {
         $this->builder->concurrent();
 
@@ -122,7 +121,7 @@ class GrammarTest extends TestCase
         SQL);
     }
 
-    public function testIgnoreLines()
+    public function test_ignore_lines()
     {
         $this->builder->ignoreLines(1);
 
@@ -133,7 +132,7 @@ class GrammarTest extends TestCase
         SQL);
     }
 
-    public function testFieldsTerminatedBy()
+    public function test_fields_terminated_by()
     {
         $this->builder->fieldsTerminatedBy(',');
 
@@ -144,7 +143,7 @@ class GrammarTest extends TestCase
         SQL);
     }
 
-    public function testFields()
+    public function test_fields()
     {
         $this->builder->fields(',', '"', '\\\\', true);
 
@@ -156,7 +155,7 @@ class GrammarTest extends TestCase
         SQL);
     }
 
-    public function testLines()
+    public function test_lines()
     {
         $this->builder->lines('', '\\n');
 
@@ -168,7 +167,7 @@ class GrammarTest extends TestCase
         SQL);
     }
 
-    public function testCompileWithSet()
+    public function test_compile_with_set()
     {
         $this->builder->set([
             'name' => new Expression("concat(@forename, ' ', @surname)"),
@@ -182,7 +181,7 @@ class GrammarTest extends TestCase
         SQL, ['sales']);
     }
 
-    public function testCompileWithCharset()
+    public function test_compile_with_charset()
     {
         $this->builder->charset('utf8mb4');
 
@@ -193,7 +192,7 @@ class GrammarTest extends TestCase
         SQL);
     }
 
-    public function testCompileWithAllOptions()
+    public function test_compile_with_all_options()
     {
         $this->builder
             ->replace()
@@ -229,6 +228,7 @@ class GrammarTest extends TestCase
 
         if (isset($expectedBindings)) {
             $this->assertSame($expectedBindings, $query->getBindings());
+
             return;
         }
 

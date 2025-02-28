@@ -3,29 +3,29 @@
 namespace Tests\Unit\Builder\Concerns;
 
 use EllGreen\LaravelLoadFile\Builder\Concerns\HasFields;
-use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class HasFieldsTest extends TestCase
 {
-    /** @var MockObject|HasFields */
-    private MockObject $hasFields;
+    /** @var HasFields */
+    private $hasFields;
 
     protected function setUp(): void
     {
-        parent::setUp();
-
-        $this->hasFields = $this->getMockForTrait(HasFields::class);
+        $this->hasFields = new class
+        {
+            use HasFields;
+        };
     }
 
-    public function testSetFieldsTerminatedBy()
+    public function test_set_fields_terminated_by(): void
     {
         $this->hasFields->fieldsTerminatedBy(',');
 
         $this->assertSame(',', $this->hasFields->getFieldsTerminatedBy());
     }
 
-    public function testSetFieldsEnclosedBy()
+    public function test_set_fields_enclosed_by(): void
     {
         $this->hasFields->fieldsEnclosedBy('"', $optionally = true);
 
@@ -33,14 +33,14 @@ class HasFieldsTest extends TestCase
         $this->assertTrue($this->hasFields->getFieldsOptionallyEnclosed());
     }
 
-    public function testSetFieldsEscapedBy()
+    public function test_set_fields_escaped_by(): void
     {
         $this->hasFields->fieldsEscapedBy('\\\\');
 
         $this->assertSame('\\\\', $this->hasFields->getFieldsEscapedBy());
     }
 
-    public function testSetFields()
+    public function test_set_fields(): void
     {
         $this->hasFields->fields(',', '"', '\\\\', true);
 

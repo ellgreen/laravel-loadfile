@@ -7,10 +7,10 @@ use Illuminate\Support\Facades\DB;
 
 class LoadFileTest extends TestCase
 {
-    public function testSimpleLoad()
+    public function test_simple_load()
     {
         LoadFile::connection('mysql')
-            ->file(realpath(__DIR__ . '/../data/people-simple.csv'), true)
+            ->file(realpath(__DIR__.'/../data/people-simple.csv'), true)
             ->into('people')
             ->charset('utf8mb4')
             ->columns(['name', 'dob', 'greeting'])
@@ -21,9 +21,9 @@ class LoadFileTest extends TestCase
         $this->assertJohnAndJaneExist();
     }
 
-    public function testLoadWithSet()
+    public function test_load_with_set()
     {
-        LoadFile::file(realpath(__DIR__ . '/../data/people.csv'), true)
+        LoadFile::file(realpath(__DIR__.'/../data/people.csv'), true)
             ->into('people')
             ->columns([DB::raw('@forename'), DB::raw('@surname'), 'dob'])
             ->set([
@@ -47,9 +47,9 @@ class LoadFileTest extends TestCase
         ]);
     }
 
-    public function testIgnoreRow()
+    public function test_ignore_row()
     {
-        LoadFile::file(realpath(__DIR__ . '/../data/people-simple.csv'), true)
+        LoadFile::file(realpath(__DIR__.'/../data/people-simple.csv'), true)
             ->into('people')
             ->ignoreLines(1)
             ->columns(['name', 'dob', 'greeting'])
@@ -69,9 +69,9 @@ class LoadFileTest extends TestCase
         ]);
     }
 
-    public function testReplace()
+    public function test_replace()
     {
-        LoadFile::file(realpath(__DIR__ . '/../data/people-simple.csv'), true)
+        LoadFile::file(realpath(__DIR__.'/../data/people-simple.csv'), true)
             ->replace()
             ->into('people')
             ->columns(['name', 'dob', 'greeting'])
@@ -81,9 +81,9 @@ class LoadFileTest extends TestCase
         $this->assertJohnAndJaneExist();
     }
 
-    public function testIgnore()
+    public function test_ignore()
     {
-        LoadFile::file(realpath(__DIR__ . '/../data/people-simple.csv'), true)
+        LoadFile::file(realpath(__DIR__.'/../data/people-simple.csv'), true)
             ->ignore()
             ->into('people')
             ->columns(['name', 'dob', 'greeting'])
@@ -93,9 +93,9 @@ class LoadFileTest extends TestCase
         $this->assertJohnAndJaneExist();
     }
 
-    public function testLowPriority(): void
+    public function test_low_priority(): void
     {
-        LoadFile::file(realpath(__DIR__ . '/../data/people-simple.csv'), true)
+        LoadFile::file(realpath(__DIR__.'/../data/people-simple.csv'), true)
             ->lowPriority()
             ->into('people')
             ->columns(['name', 'dob', 'greeting'])
@@ -105,9 +105,9 @@ class LoadFileTest extends TestCase
         $this->assertJohnAndJaneExist();
     }
 
-    public function testConcurrent(): void
+    public function test_concurrent(): void
     {
-        LoadFile::file(realpath(__DIR__ . '/../data/people-simple.csv'), true)
+        LoadFile::file(realpath(__DIR__.'/../data/people-simple.csv'), true)
             ->concurrent()
             ->into('people')
             ->columns(['name', 'dob', 'greeting'])

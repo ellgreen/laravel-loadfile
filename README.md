@@ -23,7 +23,7 @@ https://dev.mysql.com/doc/refman/8.0/en/load-data.html
 
 ## Installation
 
-**Requires > PHP 8.1 and > Laravel 9**
+**Requires >= PHP 8.2 and >= Laravel 12**
 
 *Older versions of Laravel and PHP are supported through previous major versions of this library*
 

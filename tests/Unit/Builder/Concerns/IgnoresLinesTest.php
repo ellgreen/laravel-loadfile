@@ -3,22 +3,22 @@
 namespace Tests\Unit\Builder\Concerns;
 
 use EllGreen\LaravelLoadFile\Builder\Concerns\IgnoresLines;
-use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class IgnoresLinesTest extends TestCase
 {
-    /** @var MockObject|IgnoresLines */
-    private MockObject $ignoresLines;
+    /** @var IgnoresLines */
+    private $ignoresLines;
 
     protected function setUp(): void
     {
-        parent::setUp();
-
-        $this->ignoresLines = $this->getMockForTrait(IgnoresLines::class);
+        $this->ignoresLines = new class
+        {
+            use IgnoresLines;
+        };
     }
 
-    public function testSetIgnoreLines()
+    public function test_set_ignore_lines(): void
     {
         $this->ignoresLines->ignoreLines(1);
 

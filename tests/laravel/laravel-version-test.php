@@ -9,7 +9,7 @@ $laravelVersions = array_map(function ($version) {
     return trim($version, '^<>.0');
 }, explode('|', $composerConfig['require']['illuminate/database']));
 
-passthru('rsync --delete -a --exclude=vendor/ --exclude=.*/ /app ' . dirname(TEST_PATH));
+passthru('rsync --delete -a --exclude=vendor/ --exclude=.*/ /app '.dirname(TEST_PATH));
 
 chdir(TEST_PATH);
 
@@ -20,10 +20,10 @@ foreach ($laravelVersions as $laravelVersion) {
     $testBench = intval($laravelVersion) - 2;
     $composerConfig['require-dev']['orchestra/testbench'] = "^{$testBench}.0";
 
-    file_put_contents(TEST_PATH . 'composer.json', json_encode($composerConfig, JSON_PRETTY_PRINT));
+    file_put_contents(TEST_PATH.'composer.json', json_encode($composerConfig, JSON_PRETTY_PRINT));
 
-    exec('composer update -q');
-    passthru('php ./vendor/bin/phpunit --colors=always', $resultCode);
+    exec('composer update');
+    passthru('php ./vendor/bin/pest --colors=always', $resultCode);
 
     if ($resultCode !== 0) {
         echo "\n\nTests failed for Laravel {$laravelVersion}\n";

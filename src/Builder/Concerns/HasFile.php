@@ -5,8 +5,11 @@ namespace EllGreen\LaravelLoadFile\Builder\Concerns;
 trait HasFile
 {
     private ?string $file = null;
+
     private bool $local = false;
+
     private ?string $table = null;
+
     private ?string $charset = null;
 
     public function file(string $file, ?bool $local = null): self
@@ -23,18 +26,21 @@ trait HasFile
     public function local(bool $local): self
     {
         $this->local = $local;
+
         return $this;
     }
 
     public function into(string $table): self
     {
         $this->table = $table;
+
         return $this;
     }
 
     public function charset(?string $charset): self
     {
         $this->charset = $charset;
+
         return $this;
     }
 

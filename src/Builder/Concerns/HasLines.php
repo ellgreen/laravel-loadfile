@@ -5,17 +5,20 @@ namespace EllGreen\LaravelLoadFile\Builder\Concerns;
 trait HasLines
 {
     private ?string $linesStartingBy = null;
+
     private ?string $linesTerminatedBy = null;
 
     public function linesStartingBy(?string $startingBy): self
     {
         $this->linesStartingBy = $startingBy;
+
         return $this;
     }
 
     public function linesTerminatedBy(?string $terminatedBy): self
     {
         $this->linesTerminatedBy = $terminatedBy;
+
         return $this;
     }
 

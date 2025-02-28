@@ -37,7 +37,7 @@ class Grammar extends MySqlGrammar
             $querySegments->push('local');
         }
 
-        $querySegments->push('infile ' . $this->quoteString($file));
+        $querySegments->push('infile '.$this->quoteString($file));
 
         if ($query->isReplace()) {
             $querySegments->push('replace');
@@ -47,10 +47,10 @@ class Grammar extends MySqlGrammar
             $querySegments->push('ignore');
         }
 
-        $querySegments->push('into table ' . $this->wrapTable($table));
+        $querySegments->push('into table '.$this->wrapTable($table));
 
         if ($charset = $query->getCharset()) {
-            $querySegments->push('character set ' . $this->quoteString($charset));
+            $querySegments->push('character set '.$this->quoteString($charset));
         }
 
         $querySegments->push($this->compileFields(
@@ -69,13 +69,13 @@ class Grammar extends MySqlGrammar
         $columns = $query->getColumns();
 
         if (! empty($columns)) {
-            $querySegments->push('(' . $this->columnize($columns) . ')');
+            $querySegments->push('('.$this->columnize($columns).')');
         }
 
         if ($set = $query->getSet()) {
             $querySegments->push($this->compileSetColumns($set));
             /** @psalm-suppress MissingClosureParamType|InvalidArgument */
-            $values = collect($set)->filter(fn($value) => ! $this->isExpression($value))->values();
+            $values = collect($set)->filter(fn ($value) => ! $this->isExpression($value))->values();
             $bindings->push($values->toArray());
         }
 
@@ -97,10 +97,10 @@ class Grammar extends MySqlGrammar
 
         return collect([
             'fields',
-            isset($terminatedBy) ? 'terminated by ' . $this->quoteString($terminatedBy) : '',
+            isset($terminatedBy) ? 'terminated by '.$this->quoteString($terminatedBy) : '',
             isset($enclosedBy) ? ($optionallyEnclosed ? 'optionally' : '') : '',
-            isset($enclosedBy) ? 'enclosed by ' . $this->quoteString($enclosedBy) : '',
-            isset($escapedBy) ? 'escaped by ' . $this->quoteString($escapedBy) : '',
+            isset($enclosedBy) ? 'enclosed by '.$this->quoteString($enclosedBy) : '',
+            isset($escapedBy) ? 'escaped by '.$this->quoteString($escapedBy) : '',
         ])->filter()->implode(' ');
     }
 
@@ -112,17 +112,17 @@ class Grammar extends MySqlGrammar
 
         return collect([
             'lines',
-            isset($startingBy) ? 'starting by ' . $this->quoteString($startingBy) : '',
-            isset($terminatedBy) ? 'terminated by ' . $this->quoteString($terminatedBy) : '',
+            isset($startingBy) ? 'starting by '.$this->quoteString($startingBy) : '',
+            isset($terminatedBy) ? 'terminated by '.$this->quoteString($terminatedBy) : '',
         ])->filter()->implode(' ');
     }
 
     private function compileSetColumns(array $values): string
     {
         /** @psalm-suppress MissingClosureParamType */
-        return 'set ' . collect($values)->map(function ($value, $key) {
+        return 'set '.collect($values)->map(function ($value, $key) {
             /** @psalm-suppress MixedArgument */
-            return $this->wrap($key) . ' = ' . $this->parameter($value);
+            return $this->wrap($key).' = '.$this->parameter($value);
         })->implode(', ');
     }
 }
