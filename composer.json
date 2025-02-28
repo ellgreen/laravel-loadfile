@@ -33,8 +33,7 @@
     "scripts": {
         "lint": "@php ./vendor/bin/pint",
         "static": "@php ./vendor/bin/phpstan analyse",
-        "test-unit": "@php ./vendor/bin/pest --colors=always tests/Unit",
-        "test-unit-coverage": "@php ./vendor/bin/pest tests/Unit --coverage-html .coverage/unit",
+        "test-unit": "@php ./vendor/bin/pest --colors=always --coverage --min=90 tests/Unit",
         "check": [
             "@lint",
             "@static",
@@ -42,12 +41,10 @@
         ],
         "test": [
             "@docker-up",
-            "@docker-laravel-test"
+            "@docker-test"
         ],
         "docker-up": "docker compose up -d database",
-        "docker-test": "docker compose run --rm app php ./vendor/bin/pest",
-        "docker-laravel-test": "docker compose run --rm app php tests/laravel/laravel-version-test.php",
-        "docker-test-coverage": "docker compose run --rm app php ./vendor/bin/pest --coverage-html .coverage/all"
+        "docker-test": "docker compose run --rm app php tests/laravel/laravel-version-test.php"
     },
     "extra": {
         "laravel": {
