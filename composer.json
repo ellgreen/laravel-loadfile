@@ -22,12 +22,12 @@
     },
     "require": {
         "php": "^8.2",
-        "illuminate/database": "^12.0"
+        "illuminate/database": "^12.0|^13.0"
     },
     "require-dev": {
-        "orchestra/testbench": "^10.0",
+        "orchestra/testbench": "^10.0|^11.0",
         "larastan/larastan": "^3.0",
-        "pestphp/pest": "^3.7",
+        "pestphp/pest": "^3.7|^4.4",
         "laravel/pint": "^1.21"
     },
     "scripts": {
