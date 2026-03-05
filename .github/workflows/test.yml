@@ -6,51 +6,75 @@ on:
 
 jobs:
   phpcs:
+
     runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v2
+
       - uses: shivammathur/setup-php@v2
         with:
-          php-version: "8.2"
+          php-version: '8.2'
+
       - run: composer install --no-interaction --prefer-dist
+
       - run: vendor/bin/pint --test
 
   phpstan:
+
     runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v2
+
       - uses: shivammathur/setup-php@v2
         with:
-          php-version: "8.2"
+          php-version: '8.2'
+
       - run: composer install --no-interaction --prefer-dist
+
       - run: vendor/bin/phpstan analyse
 
   phpunit:
     strategy:
       matrix:
         php: [8.2, 8.3, 8.4]
-        laravel: ["12.*"]
+        laravel: ['12.*', '13.*']
         os: [ubuntu-latest]
         include:
           - laravel: 12.*
             testbench: ^10.0
+          - laravel: 13.*
+            testbench: ^11.0
+        exclude:
+          - laravel: 13.*
+            php: 8.2
+
     runs-on: ${{ matrix.os }}
+
     name: phpunit (P${{ matrix.php }} - L${{ matrix.laravel }})
+
     env:
       DB_HOST: 127.0.0.1
+
     steps:
       - uses: actions/checkout@v2
+
       - uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php }}
+
       - uses: shogo82148/actions-setup-mysql@v1
         with:
-          mysql-version: "8.0"
+          mysql-version: '8.0'
           user: loadfile
           password: loadfile-testing
           my-cnf: local_infile=1
+
       - run: mysql -uroot -h127.0.0.1 -e 'create database loadfile'
+
       - run: |
           composer require "laravel/framework:${{ matrix.laravel }}" "orchestra/testbench:${{ matrix.testbench }}" --no-interaction --no-update
           composer update --no-interaction --prefer-dist
+
       - run: vendor/bin/pest --coverage --min=100
